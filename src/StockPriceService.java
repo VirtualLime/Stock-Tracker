@@ -142,6 +142,7 @@ public class StockPriceService implements Runnable {
         jedisMake.setMap(map);
         jedisMake.fillMap(jedis);
         jedisMake.fillListUserNames(jedis);
+        //Fills out information
     }
 
     /**
