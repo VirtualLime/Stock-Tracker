@@ -6,6 +6,8 @@ import org.json.simple.parser.ParseException;
  * Class to parse a json response containing a stock price
  * Dependant on the json-simple package
  * (add as library the json-simple-1.1.1.jar file)
+ *
+ * This class came with the assignment, I use it to parse the json strings coming from the website
  */
 public class StockPriceParser {
 
@@ -31,25 +33,4 @@ public class StockPriceParser {
         }
         return price;
     }
-
-    /**
-     * Test the parsePrice method
-     * @param args
-     */
-    public static void main(String[] args) {
-
-        //example in the format returned from a call to the stock api
-        //https://financialmodelingprep.com/api/v3/stock/real-time-price/aapl
-        String jsonString = "{\n" +
-                "  \"symbol\" : \"AAPL\",\n" +
-                "  \"price\" : 262.11\n" +
-                "}";
-
-        System.out.println("String as returned from website: ");
-        System.out.println(jsonString);
-        double price = parsePrice(jsonString);
-        System.out.println("Price:");
-        System.out.println(price);
-    }
-
 }
