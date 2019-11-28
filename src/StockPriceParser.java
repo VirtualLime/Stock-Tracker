@@ -29,7 +29,7 @@ public class StockPriceParser {
         }catch(NullPointerException e) {
             System.out.println("No JSON string passed in");
             e.printStackTrace();
-            return 0.0;
+            return -1;
         }
         return price;
     }

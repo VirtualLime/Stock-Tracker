@@ -21,6 +21,9 @@ public class StockPriceService implements Runnable {
     private StockPriceParser parser;
 
 
+
+    private boolean trackerEmpty = false;
+
     private boolean first = false;
 
     //Boolean command to keep track if a user typed TRACK in the command line
@@ -90,6 +93,7 @@ public class StockPriceService implements Runnable {
                 return;
             }
             String command = in.nextLine();
+
             executeCommand(command);
         }
     }
@@ -101,23 +105,23 @@ public class StockPriceService implements Runnable {
     public void executeCommand(String command) {
         //Calls on helper methods to try to spread the code out
         System.out.println("Received Command: " + command);
-          if (command.equals("QUIT!")) {
+          if (command.equals("QUIT!".trim())) {
             try {
                 quit();
             }catch(IOException e){
                 System.out.print("Exception " + e);
             }
-        } else if (command.equals("HELP!")) {
+        } else if (command.equals("HELP!")){
             help();
-        } else if (command.startsWith("USER")) {
+        } else if (command.startsWith("USER")){
             user(command);
-        } else if (command.startsWith("LOGIN")) {
+        } else if (command.startsWith("LOGIN")){
             login(command);
-        } else if (command.equals("CURRENTUSER!")) {
+        } else if (command.equals("CURRENTUSER!")){
             currentUser();
-        } else if (command.equals("LISTUSERS!")) {
+        } else if (command.equals("LISTUSERS!")){
             listUsers();
-        } else if (command.startsWith("TRACK")) {
+        } else if (command.startsWith("TRACK")){
            track(command);
         }
           else if (command.startsWith("FORGET")){
@@ -126,7 +130,7 @@ public class StockPriceService implements Runnable {
           else if(command.equals("PORTFOLIO!")){
             portfolio();
         }
-        else if (!(command.equals("HELP!"))) {
+        else if (!(command.equals("HELP!"))){
             out.println("Invalid command, type HELP! for program options");
             out.flush();
         }
@@ -152,15 +156,17 @@ public class StockPriceService implements Runnable {
      * Prints a help message displaying commands
      */
     public void help() {
-        out.append("USER username! creates a username||");
-        out.append("QUIT will quit and save client info to the database||");
-        out.append("PORTFOLIO!, view all of the stocks ||");
-        out.append("TRACK ticker! track a particular stock ||");
-        out.append("FORGET ticker! disables tracking of a ticker ||");
-        out.append("LISTUSERS! will list local users and users in memory ||");
-        out.append("LOGIN username will log into a username either in local memory or in the database ||");
-        out.println("");
+        out.println("-");
         out.flush();
+//        out.append("USER username! creates a username||");
+//        out.append("QUIT will quit and save client info to the database||");
+//        out.append("PORTFOLIO!, view all of the stocks ||");
+//        out.append("TRACK ticker! track a particular stock ||");
+//        out.append("FORGET ticker! disables tracking of a ticker ||");
+//        out.append("LISTUSERS! will list local users and users in memory ||");
+//        out.append("LOGIN username will log into a username either in local memory or in the database ||");
+//        out.println("");
+//        out.flush();
     }
 
     /**
@@ -344,6 +350,12 @@ public class StockPriceService implements Runnable {
             }
             tracker = tracker.replaceAll("!", "");
             price = findStock(tracker);
+            if(trackerEmpty){
+                trackerEmpty = false;
+                out.println("Nothing was entered for ticker");
+                out.flush();
+                return;
+            }
             tracker += ":" +  "$" + price;
             tracker = tracker.toLowerCase();
             System.out.println("The boolean value is " + stock);
@@ -406,6 +418,10 @@ public class StockPriceService implements Runnable {
             }
             System.out.print("Price was obtained " + parser.parsePrice(inputString));
             double price = parser.parsePrice(inputString);
+            if(price == -1){
+                trackerEmpty = true;
+                price = 0;
+            }
             return price;
         }catch(IOException e){
             System.out.println("Exception " + e);
