@@ -16,7 +16,12 @@ import java.util.Scanner;
  */
 public class StockPriceClient {
 
+    private boolean first = true;
+    private PrintWriter out;
+
     public static void main(String[] args) throws IOException {
+        StockPriceClient main = new StockPriceClient();
+        main.help();
         //Port number
         final int SERVERPORT = 1001;
         while(true) {
@@ -26,28 +31,44 @@ public class StockPriceClient {
                 OutputStream outStream = s.getOutputStream();
                 //Parsing streams
                 Scanner in = new Scanner(inStream);
-                PrintWriter out = new PrintWriter(outStream);
+                main.out = new PrintWriter(outStream);
                 //Parsing any commands
                 Scanner keyScan = new Scanner(System.in);
                 String command = keyScan.nextLine();
 
+
                 while (!(command.equals("QUIT!"))) {
-                    out.print(command + "\n");
-                    out.flush();
+                    main.out.print(command + "\n");
+                    main.out.flush();
                     String response = in.nextLine();
                     System.out.println("Receiving " + response);
                     command = keyScan.nextLine();
                 }
                 command.equals("QUIT!");
                 System.out.println("Exiting program... " + command);
-                out.print(command + "\n");
-                out.flush();
+                main.out.print(command + "\n");
+                main.out.flush();
                 System.exit(1);
 
             } catch (NoSuchElementException e) {
                 System.out.println("No string found, type HELP! for options");
             }
         }
+    }
+
+
+
+
+    public void help() {
+        System.out.println("==============COMMANDS===============");
+        System.out.println("USER username! creates a username");
+        System.out.println("QUIT will quit and save client info to the database");
+        System.out.println("PORTFOLIO!, view all of the stocks ");
+        System.out.println("TRACK ticker! track a particular stock ");
+        System.out.println("FORGET ticker! disables tracking of a ticker ");
+        System.out.println("LISTUSERS! will list local users and users in memory ");
+        System.out.println("LOGIN username will log into a username either in local memory or in the database ");
+        System.out.println("=======================================");
     }
 
 

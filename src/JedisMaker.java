@@ -268,7 +268,9 @@ public class JedisMaker {
             while(iterator.hasNext()){
                 iterString += iterator.next() + " ";
             }
-            System.out.println(iterString);
+
+
+
             if(iterString.equals("")){
                 System.out.println("it equals nothing" + iterString);
             }

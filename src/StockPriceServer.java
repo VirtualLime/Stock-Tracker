@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -11,8 +12,12 @@ import java.net.Socket;
  */
 public class StockPriceServer {
 
+    private boolean first = false;
+
     public static void main(String[] args) throws IOException {
         final int SERVERPORT = 1001;
+
+        StockPriceServer main = new StockPriceServer();
 
         ServerSocket server = new ServerSocket(SERVERPORT);
         System.out.println("Waiting for clients to connect");

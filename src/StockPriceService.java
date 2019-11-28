@@ -20,6 +20,9 @@ import java.util.*;
 public class StockPriceService implements Runnable {
     private StockPriceParser parser;
 
+
+    private boolean first = false;
+
     //Boolean command to keep track if a user typed TRACK in the command line
     private boolean tracked = false;
     //To find a stock
@@ -480,7 +483,17 @@ public class StockPriceService implements Runnable {
 
 
         if (jedisMake.checkDatabases(jedis, currentUser) && jedisMake.getMap(jedis, currentUser).contains("$")){
-            out.println(jedisMake.getMap(jedis, currentUser));
+            String map = jedisMake.getMap(jedis, currentUser);
+            String[] value = map.split("\\$* ");
+            String concat = "";
+            for(int i = 1; i < value.length; i++){
+                String element = value[i];
+                String[] nameSplit = element.split(":");
+                String name = nameSplit[0];
+                double updatedPrice = findStock(name);
+                concat += name + ":" + "$" + updatedPrice + " ";
+             }
+            out.println(concat);
             out.flush();
             return;
         }
